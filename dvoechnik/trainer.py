@@ -9,22 +9,32 @@ from .model import PolicyValueNet
 
 
 def train_episode(model: PolicyValueNet, max_plies: int = 200) -> float:
-    """Run one self-play episode and update the shared model."""
+    """Run one self-play game and train from its final outcome.
+
+    Both colors use the same network. Rewards are assigned from each player's
+    perspective after the game ends: win=+1, loss=-1, draw=0.
+    """
     env = ChessEnvironment()
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
     observations: list[tuple[int, ...]] = []
     actions: list[int] = []
-    rewards: list[float] = []
+    players: list[bool] = []
     agent = NeuralAgent(model)
 
     for _ in range(max_plies):
         observations.append(env.observe())
+        players.append(env.board.turn)
         action = agent.select_action(env)
         actions.append(action)
-        _, reward, done, _ = env.step(action)
-        rewards.append(reward)
+        _, _, done, _ = env.step(action)
         if done:
             break
+
+    if env.board.is_checkmate():
+        winner = not env.board.turn
+        rewards = [1.0 if player == winner else -1.0 for player in players]
+    else:
+        rewards = [0.0] * len(players)
 
     states = torch.tensor(observations, dtype=torch.float32)
     action_tensor = torch.tensor(actions)
