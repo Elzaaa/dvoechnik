@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Двоечник — шахматная доска</title>
+  <title>Dvoechnik — Chess Board</title>
   <style>
     :root { --light:#f0d9b5; --dark:#b58863; --ink:#202124; }
     * { box-sizing:border-box; }
@@ -22,11 +22,11 @@
 </head>
 <body>
 <main>
-  <h1>Двоечник</h1>
-  <p>Макет доски. Пока он умеет только выбирать фигуры — как настоящий агент до обучения.</p>
+  <h1>Dvoechnik</h1>
+  <p>Board preview. For now it can only select pieces — like a real agent before training.</p>
   <div id="board" aria-label="Шахматная доска"></div>
-  <div id="status">Выберите фигуру.</div>
-  <button id="reset">Вернуть стартовую позицию</button>
+  <div id="status">Select a piece.</div>
+  <button id="reset">Reset position</button>
 </main>
 <script>
 const glyph = { k:'♚', q:'♛', r:'♜', b:'♝', n:'♞', p:'♟', K:'♔', Q:'♕', R:'♖', B:'♗', N:'♘', P:'♙' };
@@ -39,8 +39,8 @@ function draw() { board.innerHTML=''; position.forEach((row,r)=>row.forEach((pie
   if (selected && !piece && Math.abs(selected[0]-r)<=1 && Math.abs(selected[1]-c)<=1) cell.classList.add('hint');
   cell.textContent=glyph[piece]||''; cell.onclick=()=>click(r,c); board.append(cell);
 })); }
-function click(r,c) { if (position[r][c]) { selected=[r,c]; status.textContent=`Выбрана клетка ${String.fromCharCode(97+c)}${8-r}. Легальность хода пока изучается.`; } else if(selected) { position[r][c]=position[selected[0]][selected[1]]; position[selected[0]][selected[1]]='.'; selected=null; status.textContent='Ход сделан. Двоечник пока не проверяет правила.'; } draw(); }
-document.querySelector('#reset').onclick=()=>{ position=start.map(row=>row.split('')); selected=null; status.textContent='Выберите фигуру.'; draw(); };
+function click(r,c) { if (position[r][c]) { selected=[r,c]; status.textContent=`Selected ${String.fromCharCode(97+c)}${8-r}. Move legality is still being studied.`; } else if(selected) { position[r][c]=position[selected[0]][selected[1]]; position[selected[0]][selected[1]]='.'; selected=null; status.textContent='Move made. Dvoechnik does not enforce rules yet.'; } draw(); }
+document.querySelector('#reset').onclick=()=>{ position=start.map(row=>row.split('')); selected=null; status.textContent='Select a piece.'; draw(); };
 draw();
 </script>
 </body>

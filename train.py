@@ -1,4 +1,4 @@
-"""Минимальный каркас self-play. Stockfish и готовые оценки намеренно не используются."""
+"""Minimal self-play scaffold. Stockfish and precomputed evaluations are intentionally excluded."""
 from dataclasses import dataclass
 
 import chess
@@ -13,7 +13,7 @@ class Step:
 
 
 def random_self_play(max_plies: int = 200) -> list[Step]:
-    """Проверяет, что среда умеет выдавать партии; это ещё не обучение."""
+    """Verify that the environment can produce games; this is not training yet."""
     board = chess.Board()
     history: list[Step] = []
     for _ in range(max_plies):
@@ -32,5 +32,5 @@ def random_self_play(max_plies: int = 200) -> list[Step]:
 
 if __name__ == "__main__":
     game = random_self_play()
-    print(f"Сыграно полуходов: {len(game)}")
-    print("Следующий шаг: заменить первый легальный ход policy-сетью и self-play.")
+    print(f"Plies played: {len(game)}")
+    print("Next step: replace the first legal move with a policy network and self-play.")

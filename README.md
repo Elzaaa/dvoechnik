@@ -1,34 +1,34 @@
-# Двоечник (Dvoechnik)
+# Dvoechnik
 
-Нейросеть, которая учится играть в шахматы с нуля — и делает это с достоинством двоечника.
+A neural network that learns chess from scratch — with the confidence of a failing student.
 
-## Концепция
+## Concept
 
-Двоечник не получает партии Stockfish, дебютную книгу или готовую шахматную оценку.
-Он учится через взаимодействие со средой:
+Dvoechnik does not receive Stockfish games, an opening book, or precomputed chess evaluations.
+It learns by interacting with an environment:
 
-1. видит состояние доски;
-2. выбирает действие;
-3. получает новое состояние и награду;
-4. играет тысячи партий против самого себя;
-5. постепенно учится отличать хороший ход от великолепного зевка.
+1. observes the board state;
+2. chooses an action;
+3. receives a new state and a reward;
+4. plays thousands of games against itself;
+5. slowly learns to distinguish a good move from a spectacular blunder.
 
-На первом этапе правила шахмат задаются средой, а не нейросетью. Это не читерство: без корректной среды агент не сможет понять, что партия закончилась, что ход невозможен и почему ферзь внезапно исчез.
+At the first stage, chess rules are provided by the environment, not by the neural network. This is not cheating: without a correct environment, the agent cannot understand when a game ends, which moves are illegal, or why its queen suddenly disappeared.
 
-## План обучения
+## Learning roadmap
 
-- **Этап 0 — доска:** визуализация позиции и ручные ходы.
-- **Этап 1 — среда:** легальные ходы, превращение пешки, шах, мат, пат и ничья.
-- **Этап 2 — базовый агент:** случайный агент и проверка цикла self-play.
-- **Этап 3 — обучение:** policy/value-сеть, маскирование нелегальных ходов и reinforcement learning.
-- **Этап 4 — поиск:** MCTS, как в AlphaZero, без использования готового движка.
-- **Этап 5 — проверка:** матчи против случайного агента, старых чекпойнтов и человека.
+- **Stage 0 — board:** position visualization and manual moves.
+- **Stage 1 — environment:** legal moves, promotion, check, checkmate, stalemate, and draws.
+- **Stage 2 — baseline agent:** random play and a verified self-play loop.
+- **Stage 3 — training:** a policy/value network, illegal-move masking, and reinforcement learning.
+- **Stage 4 — search:** MCTS, inspired by AlphaZero, without a ready-made engine.
+- **Stage 5 — evaluation:** matches against random agents, old checkpoints, and humans.
 
-## Запуск макета
+## Running the board preview
 
-Открой `board/index.html` в браузере. Сейчас это интерактивный макет стартовой позиции; логика обучения подключается отдельно.
+Open `board/index.html` in a browser. It is only a visual preview; the training system is Python-first.
 
-## Статус
+## Status
 
-Проект находится на этапе 0. Никаких готовых шахматных ботов в обучение не подмешиваем.
+The project is at Stage 0. No ready-made chess bot is used for training.
 
