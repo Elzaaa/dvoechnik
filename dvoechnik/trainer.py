@@ -8,14 +8,13 @@ from .environment import ChessEnvironment
 from .model import PolicyValueNet
 
 
-def train_episode(model: PolicyValueNet, max_plies: int = 200) -> float:
+def train_episode(model: PolicyValueNet, optimizer: optim.Optimizer, max_plies: int = 200) -> tuple[float, str]:
     """Run one self-play game and train from its final outcome.
 
     Both colors use the same network. Rewards are assigned from each player's
     perspective after the game ends: win=+1, loss=-1, draw=0.
     """
     env = ChessEnvironment()
-    optimizer = optim.Adam(model.parameters(), lr=1e-3)
     observations: list[tuple[int, ...]] = []
     actions: list[int] = []
     players: list[bool] = []
@@ -33,8 +32,10 @@ def train_episode(model: PolicyValueNet, max_plies: int = 200) -> float:
     if env.board.is_checkmate():
         winner = not env.board.turn
         rewards = [1.0 if player == winner else -1.0 for player in players]
+        result = "white" if winner else "black"
     else:
         rewards = [0.0] * len(players)
+        result = "draw"
 
     states = torch.tensor(observations, dtype=torch.float32)
     action_tensor = torch.tensor(actions)
@@ -45,10 +46,11 @@ def train_episode(model: PolicyValueNet, max_plies: int = 200) -> float:
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-    return float(loss.item())
+    return float(loss.item()), result
 
 
 if __name__ == "__main__":
     network = PolicyValueNet()
-    loss = train_episode(network)
-    print(f"Completed one self-play training episode. Loss: {loss:.4f}")
+    optimizer = optim.Adam(network.parameters(), lr=1e-3)
+    loss, result = train_episode(network, optimizer)
+    print(f"Completed one self-play training episode. Result: {result}. Loss: {loss:.4f}")
